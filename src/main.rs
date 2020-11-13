@@ -3,7 +3,10 @@ use std::env;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    let n: i32 = args[1].parse().expect("Not a valid 32 bit signed integer.");
+    let n: i32 = match args[1].parse() {
+        Ok(yay) => yay,
+        Err(_e) => 100
+    };
 
     println!();
 
@@ -11,10 +14,10 @@ fn main() {
     reqs.insert(3, "Fizz");
     reqs.insert(5, "Buzz");
 
-    doTheFor(n, &reqs);
+    do_the_for(n, &reqs);
 }
 
-fn doTheFor(max: i32, map: &HashMap<i32, &str>) {
+fn do_the_for(max: i32, map: &HashMap<i32, &str>) {
     for n in 1..max {
         let mut out = String::new();
 
