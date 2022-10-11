@@ -3,36 +3,31 @@ use std::env;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    let n: i32 = match args[1].parse() {
-        Ok(yay) => yay,
-        Err(_e) => 100
-    };
+    let n: i32 = args[1].parse().unwrap_or(100);
 
-    println!();
+    let reqs = HashMap::from([
+        (3, "Fizz".into()),
+        (5, "Buzz".into())
+    ]);
 
-    let mut reqs = HashMap::new();
-    reqs.insert(3, "Fizz");
-    reqs.insert(5, "Buzz");
-
-    do_the_for(n, &reqs);
+    println!("{}", do_the_for(n, reqs));
 }
 
-fn do_the_for(max: i32, map: &HashMap<i32, &str>) {
-    for n in 1..max {
+fn do_the_for<T: IntoIterator<Item = (i32, String)> + Clone> (max: i32, map: T) -> String {
+    (1..=max).into_iter().map(|n| {
         let mut out = String::new();
-        let mut works = False;
+        let mut worked = false;
 
-        for (key, value) in map {
+        for (key, value) in map.clone() {
             if n % key == 0 {
-                out += &value.to_string()[..];
-                works = True;
+                out += &value;
+                worked = true;
             }
         }
 
-        if !works {
-            println!("{}", n);
-        } else {
-            println!("{}", out);
+        if !worked {
+            out += &n.to_string();
         }
+        out + "\n"
+    }).collect()
     }
-}
