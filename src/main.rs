@@ -16,8 +16,7 @@ fn main() {
 fn do_the_for<T: IntoIterator<Item = (i32, String)> + Clone> (max: i32, map: T) -> String {
     (1..=max).into_iter().map(|n| {
         let mut out = String::new();
-        let mut worked = false;
-
+        
         for (key, value) in map.clone() {
             if n % key == 0 {
                 out += &value;
@@ -25,7 +24,7 @@ fn do_the_for<T: IntoIterator<Item = (i32, String)> + Clone> (max: i32, map: T) 
             }
         }
 
-        if !worked {
+        if out.is_empty() {
             out += &n.to_string();
         }
         out + "\n"
